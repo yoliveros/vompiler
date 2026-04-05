@@ -1,5 +1,3 @@
-#include "comp_driver.h"
-#include "base.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

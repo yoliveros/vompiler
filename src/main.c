@@ -1,6 +1,9 @@
-#include "base.h"
-#include "comp_driver.h"
 #include <stdio.h>
+
+// ub.h
+#include "ub.h"
+// ub.c
+#include "ub.c"
 
 int main(int argc, char **argv) {
   if (argc < 2) {

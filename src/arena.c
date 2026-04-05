@@ -1,5 +1,3 @@
-#include "arena.h"
-#include "base.h"
 #include <stdio.h>
 #include <stdlib.h>
 

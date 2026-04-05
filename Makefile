@@ -1,6 +1,6 @@
 CC = clang  
 MAKEFLAGS += -j$(shell nproc)
-# I_FLAGS = -I
+I_FLAGS = -Isrc
 # L_FLAGS = -l
 C_FLAGS = -Wall -Wextra -pedantic -std=c17 $(I_FLAGS) $(L_FLAGS)
 DEV = -g -O0 -DDEBUG -fsanitize=address
@@ -16,33 +16,32 @@ endif
 
 NAME = vompiler
 
-SRC_DIR = src
+BUILD_SRC = src/main.c
 BUILD_DIR = build
 TARGET = $(BUILD_DIR)/$(NAME)
 
-SRCS = $(wildcard $(SRC_DIR)/*.c)
-OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
+# SRCS = $(wildcard $(SRC_DIR)/*.c)
+# OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
-ARGS = $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+# ARGS = $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
 
 ifeq ($(OS), Windows_NT)
 	CLEAN_CMD = rd /s /q $(BUILD_DIR)
+	MKDIR_CMD = if not exist $(BUILD_DIR) mkdir $(BUILD_DIR)
 else
 	CLEAN_CMD = rm -rf $(BUILD_DIR)
+	MKDIR_CMD = mkdir -p $(BUILD_DIR)
 endif
 
 .PHONY: all clean run prod dev
 
 all: $(TARGET)
 
-$(TARGET): $(OBJS) | $(BUILD_DIR)
-	$(CC) $(OBJS) -o $@ $(C_FLAGS) 
-
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
-	$(CC) $(C_FLAGS) -c $< -o $@
+$(TARGET): $(BUILD_SRC) | $(BUILD_DIR)
+	$(CC) $(C_FLAGS) $(BUILD_SRC) -o $(TARGET) 
 
 $(BUILD_DIR):
-	mkdir -p $(BUILD_DIR)
+	$(MKDIR_CMD)
 
 prod:
 	$(MAKE) clean

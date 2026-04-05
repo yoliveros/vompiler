@@ -1,7 +1,5 @@
 #pragma once
 
-#include "base.h"
-
 #define ARENA_BASE_POS (sizeof(mem_arena))
 #define ARENA_ALIGN (sizeof(void *))
 
