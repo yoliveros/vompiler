@@ -1,17 +1,17 @@
 #define FILE_SIZE 256
 
-void get_file_name(string file) {
-  // string full_name = STRING_LIT(strrchr(file.str, '/'));
+void get_file_name(string8 file) {
+  // string8 full_name = STRING8_LIT(strrchr(file.str, '/'));
 
   // Name without extension
-  STRING_LIT(strtok(file.str, "."));
+  STRING8_LIT(strtok(file.str, "."));
 }
 
-string preprocess(string file) {
-  string file_name = STRING_LIT(strcpy(file_name.str, file.str));
+string8 preprocess(string8 file) {
+  string8 file_name = STRING8_LIT(strcpy(file_name.str, file.str));
   get_file_name(file_name);
 
-  string out_file = file_name;
+  string8 out_file = file_name;
   strcat(out_file.str, ".i");
 
   char cmd[FILE_SIZE];
@@ -23,10 +23,10 @@ string preprocess(string file) {
   return out_file;
 }
 
-string compile(string file) {
-  string file_name = STRING_LIT(strtok(file.str, "."));
+string8 compile(string8 file) {
+  string8 file_name = STRING8_LIT(strtok(file.str, "."));
 
-  string out_file = STRING_LIT(strcat(file_name.str, ".s"));
+  string8 out_file = STRING8_LIT(strcat(file_name.str, ".s"));
   char cmd[FILE_SIZE];
   snprintf(cmd, FILE_SIZE, "gcc %s.c -o %s", file.str, out_file.str);
   system(cmd);
@@ -34,20 +34,20 @@ string compile(string file) {
   return out_file;
 }
 
-b32 linker(string file) {
-  string file_name = STRING_LIT(strcat(file_name.str, "."));
+b32 linker(string8 file) {
+  string8 file_name = STRING8_LIT(strcat(file_name.str, "."));
 
   char cmd[FILE_SIZE];
   snprintf(cmd, FILE_SIZE, "gcc %s -o %s", file.str, file_name.str);
   system(cmd);
-  return TRUE;
+  return true;
 }
 
-b32 comp_driver(string file) {
+b32 comp_driver(string8 file) {
   // FILE *p_file = fopen(file.str, "r");
 
-  string pp_file = preprocess(file);
-  // string comp_file = compile(pp_file);
+  string8 pp_file = preprocess(file);
+  // string8 comp_file = compile(pp_file);
   // b32 success = linker(comp_file);
   // fclose(p_file);
   // return success;

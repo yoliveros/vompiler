@@ -3,4 +3,4 @@
 #include <stdlib.h>
 #include <string.h>
 
-b32 comp_driver(string file);
+b32 comp_driver(string8 file);

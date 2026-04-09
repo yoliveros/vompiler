@@ -1,3 +1,3 @@
-#include "base/base_inc.h"
-#include "os/os_core.h"
+#include "base/base.h"
+#include "os/os.h"
 #include "driver/comp_driver.h"

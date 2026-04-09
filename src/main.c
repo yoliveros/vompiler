@@ -10,7 +10,7 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  string file = STRING_LIT(argv[1]);
+  string8 file = STRING8_LIT(argv[1]);
 
   b32 succ = comp_driver(file);
   if (succ)

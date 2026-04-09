@@ -1,2 +1,2 @@
 
-static void cmd_run(string *args);
+static void cmd_run(string8 *args);
