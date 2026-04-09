@@ -1,8 +1,5 @@
 #pragma once
 
-#include <math.h>
-#include <stdint.h>
-
 typedef int8_t i8;
 typedef int16_t i16;
 typedef int32_t i32;
@@ -25,6 +22,12 @@ typedef struct {
   char *str;
   u64 len;
 } string;
+
+#if defined(__linux__)
+#define OS_LINUX 1
+#elif defined(_WIN32)
+#define OS_WIN 1
+#endif
 
 #define STRING_FMT(str) (int)(str).len, (str).str
 

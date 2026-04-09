@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #define FILE_SIZE 256
 
 void get_file_name(string file) {
@@ -15,7 +11,9 @@ string preprocess(string file) {
   string file_name = STRING_LIT(strcpy(file_name.str, file.str));
   get_file_name(file_name);
 
-  string out_file = STRING_LIT(strcat(file_name.str, ".i"));
+  string out_file = file_name;
+  strcat(out_file.str, ".i");
+
   char cmd[FILE_SIZE];
   snprintf(cmd, FILE_SIZE, "gcc -E -P %s -o %s", file.str, out_file.str);
   system(cmd);

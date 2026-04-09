@@ -1,8 +1,7 @@
 #include <stdio.h>
 
-// ub.h
+// unity build
 #include "ub.h"
-// ub.c
 #include "ub.c"
 
 int main(int argc, char **argv) {
