@@ -2,7 +2,7 @@ CC = clang
 MAKEFLAGS += -j$(shell nproc)
 I_FLAGS = -Isrc
 # L_FLAGS = -l
-C_FLAGS = -Wall -Wextra -pedantic -std=c17 $(I_FLAGS) $(L_FLAGS)
+C_FLAGS = -Wall -Wextra -pedantic -std=c23 $(I_FLAGS) $(L_FLAGS)
 DEV = -g -O0 -DDEBUG -fsanitize=address
 PROD = -O2 -DNDEBUG
 
