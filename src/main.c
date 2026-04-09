@@ -12,7 +12,7 @@ int main(int argc, char **argv) {
 
   string8 file = STRING8_LIT(argv[1]);
 
-  b32 succ = comp_driver(file);
+  b32 succ = driver(file);
   if (succ)
     return 0;
 

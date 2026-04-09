@@ -43,7 +43,7 @@ b32 linker(string8 file) {
   return true;
 }
 
-b32 comp_driver(string8 file) {
+b32 driver(string8 file) {
   // FILE *p_file = fopen(file.str, "r");
 
   string8 pp_file = preprocess(file);
