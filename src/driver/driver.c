@@ -7,7 +7,7 @@ void get_file_name(string8 file) {
   STRING8_LIT(strtok(file.str, "."));
 }
 
-string8 preprocess(string8 file) {
+static string8 preprocess(string8 file) {
   string8 file_name = STRING8_LIT(strcpy(file_name.str, file.str));
   get_file_name(file_name);
 
@@ -23,10 +23,10 @@ string8 preprocess(string8 file) {
   return out_file;
 }
 
-string8 compile(string8 file) {
+static string8 compile(string8 file) {
   string8 file_name = STRING8_LIT(strtok(file.str, "."));
 
-  string8 out_file = STRING8_LIT(strcat(file_name.str, ".s"));
+  string8 out_file = file_name;
   char cmd[FILE_SIZE];
   snprintf(cmd, FILE_SIZE, "gcc %s.c -o %s", file.str, out_file.str);
   system(cmd);
@@ -34,7 +34,7 @@ string8 compile(string8 file) {
   return out_file;
 }
 
-b32 linker(string8 file) {
+static b32 linker(string8 file) {
   string8 file_name = STRING8_LIT(strcat(file_name.str, "."));
 
   char cmd[FILE_SIZE];
@@ -44,12 +44,9 @@ b32 linker(string8 file) {
 }
 
 b32 driver(string8 file) {
-  // FILE *p_file = fopen(file.str, "r");
-
   string8 pp_file = preprocess(file);
-  // string8 comp_file = compile(pp_file);
-  // b32 success = linker(comp_file);
-  // fclose(p_file);
-  // return success;
+  string8 comp_file = compile(pp_file);
+  b32 success = linker(comp_file);
+  return success;
   return 0;
 }
