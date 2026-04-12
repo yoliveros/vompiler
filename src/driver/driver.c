@@ -17,8 +17,6 @@ static string8 preprocess(string8 file) {
   char cmd[FILE_SIZE];
   snprintf(cmd, FILE_SIZE, "gcc -E -P %s -o %s", file.str, out_file.str);
   system(cmd);
-  // if (!succ)
-  //   exit(succ);
 
   return out_file;
 }
@@ -30,7 +28,8 @@ static string8 compile(string8 file) {
   char cmd[FILE_SIZE];
   snprintf(cmd, FILE_SIZE, "gcc %s.c -o %s", file.str, out_file.str);
   system(cmd);
-  system(strcat("rm ", file.str));
+  snprintf(cmd, FILE_SIZE, "rm %s.c", file.str);
+  system(cmd);
   return out_file;
 }
 
@@ -48,5 +47,4 @@ b32 driver(string8 file) {
   string8 comp_file = compile(pp_file);
   b32 success = linker(comp_file);
   return success;
-  return 0;
 }
