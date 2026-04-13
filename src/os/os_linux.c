@@ -1,5 +1,5 @@
 
-u32 os_get_page_size(void) { return (u32)sysconf(_SC_PAGESIZE); }
+u32 os_get_page_size() { return (u32)sysconf(_SC_PAGESIZE); }
 
 void *os_mem_reserve(u64 size) {
   void *out = mmap(NULL, size, PROT_NONE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);

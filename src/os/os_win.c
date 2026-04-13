@@ -1,5 +1,5 @@
 
-u32 os_get_page_size(void) {
+u32 os_get_page_size() {
   SYSTEM_INFO sysinfo = {0};
   GetSystemInfo(&sysinfo);
 

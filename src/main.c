@@ -2,7 +2,6 @@
 #include <string.h>
 
 // unity build
-#include "base/base_defs.h"
 #include "ub.h"
 #include "ub.c"
 
@@ -11,6 +10,8 @@ int main(int argc, char **argv) {
     perror("Missing params");
     return 1;
   }
+
+  mem_arena *perm_arena = arena_create(GiB(1), MiB(16));
 
   string8 file = STRING8_LIT(argv[1]);
 
@@ -27,6 +28,7 @@ int main(int argc, char **argv) {
   }
 
   b32 succ = driver(file);
+  arena_destroy(perm_arena);
   if (succ)
     return 0;
 
