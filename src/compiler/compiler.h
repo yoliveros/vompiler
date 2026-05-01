@@ -1,4 +1,4 @@
 
 #include "lexer/lexer.h"
 
-i32 compiler(string8 flag);
+b32 compiler(string8 flag, string8 buff);

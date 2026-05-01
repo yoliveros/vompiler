@@ -14,11 +14,14 @@ int main(int argc, char **argv) {
 
   string8 file = STRING8_LIT(argv[1]);
 
-  compiler(STRING8_LIT(argv[2]));
-
   b32 succ = driver(file);
+
+  b32 comp = compiler(STRING8_LIT(argv[2]));
+
   arena_destroy(perm_arena);
   if (succ)
+    return 0;
+  if (comp)
     return 0;
 
   return 1;
