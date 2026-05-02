@@ -1,9 +1,9 @@
 
 #include "lexer/lexer.c"
 
-b32 compiler(string8 flag, string8 buff) {
+string8 compiler(string8 flag, string8 buff) {
   if (flag.str == nullptr)
-    return false;
+    return (string8){.str = nullptr};
 
   lexer *lexer;
   // TODO parser

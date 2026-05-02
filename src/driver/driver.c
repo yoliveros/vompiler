@@ -21,18 +21,6 @@ static string8 preprocess(string8 file) {
   return out_file;
 }
 
-static string8 compile(string8 file) {
-  string8 file_name = STRING8_LIT(strtok(file.str, "."));
-
-  string8 out_file = file_name;
-  char cmd[FILE_SIZE];
-  snprintf(cmd, FILE_SIZE, "gcc %s.c -o %s", file.str, out_file.str);
-  system(cmd);
-  snprintf(cmd, FILE_SIZE, "rm %s.c", file.str);
-  system(cmd);
-  return out_file;
-}
-
 static b32 linker(string8 file) {
   string8 file_name = STRING8_LIT(strcat(file_name.str, "."));
 
@@ -42,9 +30,14 @@ static b32 linker(string8 file) {
   return true;
 }
 
-b32 driver(string8 file) {
+b32 driver(string8 flags, string8 file) {
   string8 pp_file = preprocess(file);
-  string8 comp_file = compile(pp_file);
+
+  string8 file_name = STRING8_LIT(strtok(pp_file.str, "."));
+
+  string8 comp_file = compiler(flags, file_name);
+
   b32 success = linker(comp_file);
+
   return success;
 }
