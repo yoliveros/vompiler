@@ -1,5 +1,5 @@
 
-u8 lexer_peak(lexer *lexer) { return lexer->column; }
+u8 lexer_peak(lexer *lexer) { return lexer->buff.str[lexer->position]; }
 
 token *lexer_next_token(lexer *lexer) {
 
@@ -22,7 +22,6 @@ token *lexer_next_token(lexer *lexer) {
     }
   }
 
-  lexer_next_token(lexer);
   return nullptr;
 }
 

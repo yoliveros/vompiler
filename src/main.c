@@ -10,7 +10,7 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  mem_arena *perm_arena = arena_create(GiB(1), MiB(16));
+  mem_arena *perm_arena = arena_create(GiB(1), MiB(1));
 
   string8 file = STRING8_LIT(argv[1]);
   string8 flags = STRING8_LIT(argv[2]);

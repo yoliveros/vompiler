@@ -3,7 +3,7 @@
 
 string8 compiler(string8 flag, string8 buff) {
   if (flag.str == nullptr)
-    return (string8){.str = nullptr};
+    return (string8){0};
 
   lexer *lexer;
   // TODO parser
@@ -29,5 +29,5 @@ string8 compiler(string8 flag, string8 buff) {
   }
 
 out:
-  return true;
+  return (string8){0};
 }

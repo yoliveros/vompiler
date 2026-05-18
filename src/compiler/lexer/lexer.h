@@ -1,6 +1,7 @@
+#pragma once
 
 typedef enum {
-  KEY_VOID,
+  KEY_VOID = 0,
   KEY_RETURN,
   KEY_INT,
   KEY_CHAR,

@@ -31,7 +31,7 @@ typedef struct {
   u64 len;
 } string8;
 
-#define STRING8_FMT(str) (int)(str).len, (str).str
+#define STRING8_FMT(s8) (int)(s8).len, (s8).str
 
 #define STRING8_LIT(txt) (string8){.str = txt, .len = sizeof(txt) - 1}
 

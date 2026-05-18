@@ -8,7 +8,9 @@ void get_file_name(string8 file) {
 }
 
 static string8 preprocess(string8 file) {
+  printf("%.*s\n", STRING8_FMT(file));
   string8 file_name = STRING8_LIT(strcpy(file_name.str, file.str));
+  printf("%.*s\n", STRING8_FMT(file_name));
   get_file_name(file_name);
 
   string8 out_file = file_name;
@@ -31,9 +33,12 @@ static b32 linker(string8 file) {
 }
 
 b32 driver(string8 flags, string8 file) {
+  printf("%.*s\n", STRING8_FMT(file));
   string8 pp_file = preprocess(file);
+  printf("%.*s\n", STRING8_FMT(pp_file));
 
   string8 file_name = STRING8_LIT(strtok(pp_file.str, "."));
+  printf("%.*s", STRING8_FMT(file_name));
 
   string8 comp_file = compiler(flags, file_name);
 
