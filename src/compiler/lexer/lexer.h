@@ -23,14 +23,6 @@ typedef enum {
   TOK_COMMA
 } token_type;
 
-typedef enum {
-  START = 0,
-  IN_ID,
-  IN_NUM,
-  IN_OPERATOR,
-  IN_STR,
-} state_machine;
-
 typedef struct {
   token_type type;
   keyword_type keyword;
@@ -40,11 +32,12 @@ typedef struct {
 } token;
 
 typedef struct {
+  mem_arena *arnea;
   string8 buff;
   u64 position;
   i32 line;
   i32 column;
 } lexer;
 
-void lexer_init(lexer *lexer, const string8 buff);
+void lexer_init(mem_arena *arena, lexer *lexer, const string8 buff);
 token *lexer_next_token(lexer *lexer);
