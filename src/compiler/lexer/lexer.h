@@ -32,7 +32,7 @@ typedef struct {
 } token;
 
 typedef struct {
-  mem_arena *arnea;
+  mem_arena *arena;
   string8 buff;
   u64 position;
   i32 line;
