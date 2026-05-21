@@ -5,6 +5,7 @@ typedef enum {
   KEY_RETURN,
   KEY_INT,
   KEY_CHAR,
+  KEY_OP
 } keyword_type;
 
 typedef enum {
