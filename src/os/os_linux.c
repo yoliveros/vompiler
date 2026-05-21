@@ -35,6 +35,9 @@ string8 os_read_file(string8 file_route) {
   off_t len = lseek(fd, 0, SEEK_END);
   void *file = mmap(nullptr, len, PROT_READ, MAP_PRIVATE, fd, 0);
 
+  if (file == MAP_FAILED)
+    return (string8){0};
+
   close(fd);
 
   return (string8){.str = file, .len = len};
