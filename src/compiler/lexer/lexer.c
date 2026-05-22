@@ -2,51 +2,103 @@
 #include "compiler/lexer/lexer.h"
 #include "base/base_arena.h"
 #include "base/base_defs.h"
-static u8 lexer_peak(lexer *lexer) { return lexer->buff.str[lexer->position]; }
+
+inline static u8 lexer_peak(lexer *lexer) {
+  return lexer->buff.str[lexer->position];
+}
 
 static void skip_whitespace(lexer *lexer) { lexer->position++; }
 
-static token *make_token(lexer *lexer, token_type token_type) {
-  token *new_token = PUSH_STRUCT(lexer->arena, token);
-  new_token->type = token_type;
-  new_token->line = lexer->line;
-  new_token->column = lexer->column;
-  switch (token_type) {
-  case TOK_EOF:
-  case TOK_OP:
-  case TOK_LPAREN:
-  case TOK_RPAREN:
-  case TOK_LBRACE:
-  case TOK_RBRACE:
-  case TOK_SEMI:
-  case TOK_COMMA:
-    new_token->lexeme.str = &lexer->buff.str[lexer->position];
-    new_token->lexeme.len = 1;
-    goto tok;
-  case TOK_ERROR:
-  case TOK_IDENT:
-  case TOK_NUMBER:
-  case TOK_STRING:
-  case TOK_KEYWORD:
-    u64 start = lexer->position;
-    new_token->lexeme.str = &lexer->buff.str[start];
-    new_token->lexeme.len = lexer->position - start;
-    goto tok;
-  default:
-    return nullptr;
-  }
+static token *read_identifier(lexer *lexer) {
+  token *t = PUSH_STRUCT(lexer->arena, token);
+  t->type = TOK_IDENT;
+  u64 start = lexer->position;
 
-tok:
-  return new_token;
+  u8 c = lexer_peak(lexer);
+  t->lexeme.str = &lexer->buff.str[start];
+  while (c != ' ') {
+    lexer->position++;
+    lexer->column++;
+    c = lexer_peak(lexer);
+  }
+  t->lexeme.len = lexer->position - start;
+
+  // case 'v':
+  //   t->keyword = KEY_VOID;
+  //   break;
+  // case 'i':
+  //   t->keyword = KEY_INT;
+  //   break;
+  // case 'c':
+  //   t->keyword = KEY_CHAR;
+  //   break;
+  // case 'r':
+  //   t->keyword = KEY_RETURN;
+  //   break;
+  // }
+
+  return t;
 }
 
-static token *read_identifier(lexer *lexer) {}
+token *read_number(lexer *lexer) {
+  token *t = PUSH_STRUCT(lexer->arena, token);
+  t->type = TOK_NUMBER;
+  i32 len = 0;
+  u8 c = lexer_peak(lexer);
+  t->lexeme.str = &lexer->buff.str[lexer->position];
+  while (c != ' ') {
+    lexer->position += len;
+    lexer->column += len;
+    c = lexer_peak(lexer);
+  }
+  t->lexeme.len = len;
 
-token *read_number(lexer *lexer) {}
+  return t;
+}
 
-static token *read_string(lexer *lexer) {}
+static token *read_string(lexer *lexer) {
+  token *t = PUSH_STRUCT(lexer->arena, token);
 
-static token *read_operator(lexer *lexer) {}
+  return t;
+}
+
+static token *read_operator(lexer *lexer) {
+  token *t = PUSH_STRUCT(lexer->arena, token);
+
+  return t;
+}
+
+static token *read_keyword(lexer *lexer) {
+  token *t = PUSH_STRUCT(lexer->arena, token);
+  switch (1) {
+  case KEY_VOID:
+  case KEY_RETURN:
+  case KEY_INT:
+  case KEY_CHAR:
+  case KEY_OP:
+  }
+
+  return t;
+}
+
+static token *make_token(lexer *lexer, token_type type) {
+  token *t = PUSH_STRUCT(lexer->arena, token);
+
+  t->type = type;
+  t->line = lexer->line;
+  t->column = lexer->column;
+
+  if (type == TOK_EOF) {
+    t->lexeme = (string8){0};
+  } else {
+    t->lexeme.str = &lexer->buff.str[lexer->position];
+    t->lexeme.len = 1;
+    lexer->position++;
+    lexer->column++;
+  }
+
+  return t;
+}
 
 static token_type char_to_token_type(u8 c) {
   switch (c) {
