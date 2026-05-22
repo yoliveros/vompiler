@@ -5,13 +5,13 @@ string8 compiler(string8 flag, string8 buff) {
   if (flag.str == nullptr)
     return (string8){0};
 
-  lexer *lexer;
+  lexer lexer;
   // TODO parser
   // TODO codegen
   // TODO Assembly
 
   mem_arena_temp scratch = arena_scratch_get(nullptr, 0);
-  lexer_init(scratch.arena, lexer, buff);
+  lexer_init(scratch.arena, &lexer, buff);
 
   if (strncmp(flag.str, "--lex", flag.len)) {
     goto out;
