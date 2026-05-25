@@ -51,6 +51,9 @@ void *arena_push(mem_arena *arena, u64 size) {
   arena->pos = new_pos;
 
   u8 *out = (u8 *)arena + pos_aligned;
+
+  memset(out, 0, size); // All to zero
+
   return out;
 }
 
