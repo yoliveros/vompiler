@@ -2,9 +2,6 @@
 string8 compiler(string8 flag, string8 buff) {
   mem_arena *perm_arena = arena_create(GiB(1), MiB(1));
 
-  if (flag.str == nullptr)
-    return (string8){0};
-
   lexer lexer;
   // TODO parser
   // TODO codegen
@@ -13,21 +10,21 @@ string8 compiler(string8 flag, string8 buff) {
   mem_arena_temp scratch = arena_scratch_get(nullptr, 0);
   lexer_init(scratch.arena, &lexer, buff);
 
-  if (strncmp(flag.str, "--lex", flag.len)) {
+  if (strncmp("--lex", flag.str, flag.len)) {
     goto out;
   }
   arena_scratch_release(scratch);
 
   // TODO parser
-  if (strncmp(flag.str, "--parse", flag.len)) {
+  if (strncmp("--parse", flag.str, flag.len)) {
     goto out;
   }
   // TODO codegen
-  if (strncmp(flag.str, "--codegen", flag.len)) {
+  if (strncmp("--codegen", flag.str, flag.len)) {
     goto out;
   }
   // TODO Assembly
-  if (strncmp(flag.str, "-S", flag.len)) {
+  if (strncmp("-S", flag.str, flag.len)) {
     goto out;
   }
 

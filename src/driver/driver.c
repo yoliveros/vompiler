@@ -1,3 +1,4 @@
+#include "base/base_defs.h"
 #define FILE_SIZE 256
 
 void get_file_name(string8 file) {
@@ -24,7 +25,9 @@ static string8 preprocess(string8 file) {
 }
 
 static b32 linker(string8 file) {
-  string8 file_name = STRING8_LIT(strcat(file_name.str, "."));
+  char buf[FILE_SIZE];
+  snprintf(buf, sizeof(buf), "%.*s", STRING8_FMT(file));
+  string8 file_name = STRING8_PTR(strcat(buf, "."));
 
   char cmd[FILE_SIZE];
   snprintf(cmd, FILE_SIZE, "gcc %s -o %s", file.str, file_name.str);
@@ -37,7 +40,7 @@ b32 driver(string8 flags, string8 file) {
   string8 pp_file = preprocess(file);
   printf("%.*s\n", STRING8_FMT(pp_file));
 
-  string8 file_name = STRING8_LIT(strtok(pp_file.str, "."));
+  string8 file_name = STRING8_PTR(strtok(pp_file.str, "."));
   printf("%.*s", STRING8_FMT(file_name));
 
   string8 comp_file = compiler(flags, file_name);

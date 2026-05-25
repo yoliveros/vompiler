@@ -1,11 +1,11 @@
 #pragma once
 
 typedef enum {
-  KEY_VOID = 0,
+  KEY_NONE = 0,
+  KEY_VOID,
   KEY_RETURN,
   KEY_INT,
   KEY_CHAR,
-  KEY_OP
 } keyword_type;
 
 typedef enum {
