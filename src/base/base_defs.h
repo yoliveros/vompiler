@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <ctype.h>
 
 #if defined(__linux__)
 #define OS_LINUX 1
@@ -31,9 +32,11 @@ typedef struct {
   u64 len;
 } string8;
 
-#define STRING8_FMT(s8) (int)(s8).len, (s8).str
+#define STRING8_FMT(s8) (i32)(s8).len, (s8).str
 
 #define STRING8_LIT(txt) (string8){.str = txt, .len = sizeof(txt) - 1}
+
+#define STRING8_PTR(txt) (string8){.str = txt, .len = strlen(txt)}
 
 static inline u64 KiB(u64 n) { return n << 10; }
 static inline u64 MiB(u64 n) { return n << 20; }
