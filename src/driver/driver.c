@@ -1,4 +1,3 @@
-#include "base/base_defs.h"
 #define FILE_SIZE 256
 
 void get_file_name(string8 file) {
@@ -27,7 +26,7 @@ static string8 preprocess(string8 file) {
 static b32 linker(string8 file) {
   char buf[FILE_SIZE];
   snprintf(buf, sizeof(buf), "%.*s", STRING8_FMT(file));
-  string8 file_name = STRING8_PTR(strcat(buf, "."));
+  string8 file_name = STRING8_PTR(strrchr(buf, '.'));
 
   char cmd[FILE_SIZE];
   snprintf(cmd, FILE_SIZE, "gcc %s -o %s", file.str, file_name.str);

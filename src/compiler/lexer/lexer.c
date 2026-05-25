@@ -26,6 +26,7 @@ static void skip_whitespace(lexer *lexer) {
     }
 
     lexer->position++;
+    c = lexer_peak(lexer);
   }
 }
 
