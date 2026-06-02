@@ -1,4 +1,6 @@
 
+#include "compiler.h"
+
 string8 compiler(string8 flag, string8 buff) {
   mem_arena *perm_arena = arena_create(GiB(1), MiB(1));
 

@@ -1,5 +1,5 @@
 
-#include "compiler/lexer/lexer.h"
+#include "lexer.h"
 
 inline static u8 lexer_peak(lexer *lexer) {
   return lexer->buff.str[lexer->position];
@@ -72,6 +72,7 @@ token *read_number(lexer *lexer) {
     lexer->column++;
     c = lexer_peak(lexer);
   }
+
   t->lexeme.len = lexer->position - start;
 
   return t;
