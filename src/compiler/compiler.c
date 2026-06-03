@@ -169,7 +169,7 @@ static void print_tokens(token *t) {
     break;
   }
 
-  printf("%s", token_msg);
+  printf("%s\n", token_msg);
 }
 
 string8 compiler(string8 flag, string8 buff) {
