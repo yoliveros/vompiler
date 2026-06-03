@@ -7,7 +7,6 @@ inline static u8 lexer_peak(lexer *lexer) {
 
 inline static token *alloc_token(lexer *lexer) {
   token *t = PUSH_STRUCT(lexer->arena, token);
-  t->keyword = KEY_NONE;
   return t;
 }
 
@@ -43,18 +42,19 @@ static token *read_identifier(lexer *lexer) {
     lexer->column++;
     c = lexer_peak(lexer);
   }
+
   t->lexeme.len = lexer->position - start;
 
   if (lexeme_match(t->lexeme, "void"))
-    t->keyword = KEY_VOID;
+    t->extra.keyword = KEY_VOID;
   else if (lexeme_match(t->lexeme, "int"))
-    t->keyword = KEY_INT;
+    t->extra.keyword = KEY_INT;
   else if (lexeme_match(t->lexeme, "char"))
-    t->keyword = KEY_CHAR;
+    t->extra.keyword = KEY_CHAR;
   else if (lexeme_match(t->lexeme, "return"))
-    t->keyword = KEY_RETURN;
+    t->extra.keyword = KEY_RETURN;
 
-  if (t->keyword != KEY_NONE)
+  if (t->extra.keyword != KEY_NONE)
     t->type = TOK_KEYWORD;
 
   return t;
@@ -87,7 +87,7 @@ static token *read_string(lexer *lexer) {
   i64 start = lexer->position;
   u8 c = lexer_peak(lexer);
 
-  while (c != '\"') {
+  while (c != '\"' && c != '\0') {
     lexer->position++;
     lexer->column++;
     c = lexer_peak(lexer);
@@ -96,12 +96,6 @@ static token *read_string(lexer *lexer) {
 
   lexer->position++;
   lexer->column++;
-
-  return t;
-}
-
-static token *read_operator(lexer *lexer) {
-  token *t = alloc_token(lexer);
 
   return t;
 }
@@ -122,6 +116,137 @@ static token *make_token(lexer *lexer, token_type type) {
     lexer->column++;
   }
 
+  return t;
+}
+
+static token *read_operator(lexer *lexer) {
+  token *t = alloc_token(lexer);
+  t->type = TOK_OP;
+  t->lexeme.str = &lexer->buff.str[lexer->position];
+
+  u8 c = lexer_peak(lexer);
+
+  u8 next = lexer->buff.str[lexer->position + 1];
+
+  switch (c) {
+  case '+':
+    if (next == '+')
+      t->extra.op = OP_INC;
+    else if (next == '=')
+      t->extra.op = OP_ADD_ASSIGN;
+    else {
+      t->extra.op = OP_PLUS;
+      goto sin;
+    }
+
+    goto dou;
+  case '-':
+    if (next == '-')
+      t->extra.op = OP_DEC;
+    else if (next == '=')
+      t->extra.op = OP_SUB_ASSIGN;
+    else {
+      t->extra.op = OP_MINUS;
+      goto sin;
+    }
+
+    goto dou;
+  case '*':
+    if (next == '=') {
+      t->extra.op = OP_MUL_ASSIGN;
+      goto dou;
+    }
+
+    t->extra.op = OP_STAR;
+    goto sin;
+  case '/':
+    if (next == '=') {
+      t->extra.op = OP_DIV_ASSIGN;
+      goto dou;
+    }
+
+    t->extra.op = OP_DIV;
+    goto sin;
+  case '%':
+    if (next == '=') {
+      t->extra.op = OP_MOD_ASSIGN;
+      goto dou;
+    }
+
+    t->extra.op = OP_MOD;
+    goto sin;
+  case '=':
+    if (next == '=') {
+      t->extra.op = OP_EQ;
+      goto dou;
+    }
+
+    t->extra.op = OP_ASSIGN;
+    goto sin;
+  case '!':
+    if (next == '=') {
+      t->extra.op = OP_NEQ;
+      goto dou;
+    }
+
+    t->extra.op = OP_NOT;
+    goto sin;
+  case '<':
+    if (next == '=') {
+      t->extra.op = OP_LEQ;
+    } else if (next == '<')
+      t->extra.op = OP_SHIFT_L;
+    else {
+      t->extra.op = OP_LT;
+      goto sin;
+    }
+
+    goto dou;
+  case '>':
+    if (next == '=') {
+      t->extra.op = OP_GEQ;
+    } else if (next == '>')
+      t->extra.op = OP_SHIFT_R;
+    else {
+      t->extra.op = OP_GT;
+      goto sin;
+    }
+
+    goto dou;
+  case '&':
+    if (next == '&') {
+      t->extra.op = OP_LAND;
+      goto dou;
+    }
+
+    t->extra.op = OP_AND;
+    goto sin;
+  case '|':
+    if (next == '|') {
+      t->extra.op = OP_LOR;
+      goto dou;
+    }
+
+    t->extra.op = OP_OR;
+    goto sin;
+  case '.':
+    t->extra.op = OP_DOT;
+    goto sin;
+  default:
+    t->extra.op = OP_NONE;
+    goto sin;
+  }
+
+sin:
+  t->lexeme.len = 1;
+  lexer->position++;
+  lexer->column++;
+  return t;
+
+dou:
+  t->lexeme.len = 2;
+  lexer->position += 2;
+  lexer->column += 2;
   return t;
 }
 
@@ -172,9 +297,10 @@ token *lexer_next_token(lexer *lexer) {
   case '>':
   case '&':
   case '|':
-  case ':':
   case '.':
     return read_operator(lexer);
+  case ':':
+    return make_token(lexer, TOK_COLON);
   case '(':
   case ')':
   case '{':

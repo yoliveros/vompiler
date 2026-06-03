@@ -9,6 +9,38 @@ typedef enum {
 } keyword_type;
 
 typedef enum {
+  OP_NONE = 0,
+  OP_PLUS,       // +
+  OP_MINUS,      // -
+  OP_STAR,       // *
+  OP_DIV,        // /
+  OP_MOD,        // %
+  OP_INC,        // ++
+  OP_DEC,        // --
+  OP_ADD_ASSIGN, // +=
+  OP_SUB_ASSIGN, // -=
+  OP_MUL_ASSIGN, // *=
+  OP_DIV_ASSIGN, // /=
+  OP_MOD_ASSIGN, // %=
+  OP_ASSIGN,     // =
+  OP_EQ,         // ==
+  OP_NOT,        // !
+  OP_NEQ,        // !=
+  OP_LT,         // <
+  OP_GT,         // >
+  OP_LEQ,        // <=
+  OP_GEQ,        // >=
+  OP_AND,        // &
+  OP_OR,         // |
+  OP_LAND,       // &&
+  OP_LOR,        // ||
+  OP_DOT,        // .
+  OP_ARROW,      // ->
+  OP_SHIFT_L,    // <<
+  OP_SHIFT_R,    // >>
+} op_token;
+
+typedef enum {
   TOK_EOF = 0,
   TOK_ERROR,
   TOK_IDENT,
@@ -21,12 +53,18 @@ typedef enum {
   TOK_LBRACE,
   TOK_RBRACE,
   TOK_SEMI,
+  TOK_COLON,
   TOK_COMMA
 } token_type;
 
+typedef union {
+  keyword_type keyword;
+  op_token op;
+} ex_token;
+
 typedef struct {
   token_type type;
-  keyword_type keyword;
+  ex_token extra;
   string8 lexeme;
   i32 line;
   i32 column;
