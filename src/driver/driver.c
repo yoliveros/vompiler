@@ -1,4 +1,5 @@
 #include "driver.h"
+#include "base/base_defs.h"
 
 #define FILE_SIZE 256
 
@@ -10,28 +11,30 @@ void get_file_name(string8 file) {
 }
 
 static string8 preprocess(string8 file) {
-  printf("%.*s\n", STRING8_FMT(file));
-  string8 file_name = STRING8_LIT(strcpy(file_name.str, file.str));
-  printf("%.*s\n", STRING8_FMT(file_name));
-  get_file_name(file_name);
+  static char buf[FILE_SIZE];
+  snprintf(buf, sizeof(buf), "%.*s", STRING8_FMT(file));
 
-  string8 out_file = file_name;
-  strcat(out_file.str, ".i");
+  char *dot = strrchr(buf, '.');
+  if (dot)
+    *dot = '\0';
 
   char cmd[FILE_SIZE];
-  snprintf(cmd, FILE_SIZE, "gcc -E -P %s -o %s", file.str, out_file.str);
+  snprintf(cmd, sizeof(cmd), "gcc -E -P %.*s -o %s.i", STRING8_FMT(file), buf);
   system(cmd);
 
-  return out_file;
+  return STRING8_PTR(buf);
 }
 
 static b32 linker(string8 file) {
-  char buf[128];
+  static char buf[128];
   snprintf(buf, sizeof(buf), "%.*s", STRING8_FMT(file));
-  string8 file_name = STRING8_PTR(strcat(buf, "."));
+
+  char *dot = strrchr(buf, '.');
+  if (dot)
+    *dot = '\0';
 
   char cmd[FILE_SIZE];
-  snprintf(cmd, FILE_SIZE, "gcc %s -o %s", buf, file_name.str);
+  snprintf(cmd, FILE_SIZE, "gcc %s -o %s", buf, buf);
   system(cmd);
   return true;
 }
@@ -41,10 +44,9 @@ b32 driver(string8 flags, string8 file) {
   string8 pp_file = preprocess(file);
   printf("%.*s\n", STRING8_FMT(pp_file));
 
-  string8 file_name = STRING8_PTR(strtok(pp_file.str, "."));
-  printf("%.*s", STRING8_FMT(file_name));
+  printf("%.*s", STRING8_FMT(pp_file));
 
-  string8 comp_file = compiler(flags, file_name);
+  string8 comp_file = compiler(flags, pp_file);
 
   b32 success = linker(comp_file);
 
