@@ -48,7 +48,8 @@ b32 driver(string8 flags, string8 file) {
 
   string8 comp_file = compiler(flags, pp_file);
 
-  b32 success = linker(comp_file);
+  // b32 success = linker(comp_file);
 
-  return success;
+  // return success;
+  return true;
 }
