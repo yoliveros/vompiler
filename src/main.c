@@ -5,7 +5,7 @@
 #include "ub.c"
 
 int main(int argc, char **argv) {
-  if (argc < 3) {
+  if (argc < 2) {
     perror("Missing params");
     return 1;
   }
@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
   string8 file = STRING8_PTR(argv[1]);
 
   string8 flags = {0};
-  if (argv[2][0] != '\0')
+  if (argc > 2 && argv[2][0] != '\0')
     flags = STRING8_PTR(argv[2]);
 
   b32 succ = driver(flags, file);
