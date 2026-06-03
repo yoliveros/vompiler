@@ -81,9 +81,9 @@ token *read_number(lexer *lexer) {
 static token *read_string(lexer *lexer) {
   token *t = alloc_token(lexer);
   t->type = TOK_STRING;
-  t->lexeme.str = &lexer->buff.str[lexer->position];
   lexer->position++; // Skipping the first doulbe quote
   lexer->column++;
+  t->lexeme.str = &lexer->buff.str[lexer->position];
   i64 start = lexer->position;
   u8 c = lexer_peak(lexer);
 
