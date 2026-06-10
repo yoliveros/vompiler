@@ -3,13 +3,6 @@
 
 #define FILE_SIZE 256
 
-void get_file_name(string8 file) {
-  // string8 full_name = STRING8_LIT(strrchr(file.str, '/'));
-
-  // Name without extension
-  STRING8_LIT(strtok(file.str, "."));
-}
-
 static string8 preprocess(string8 file) {
   static char buf[FILE_SIZE];
   snprintf(buf, sizeof(buf), "%.*s", STRING8_FMT(file));
