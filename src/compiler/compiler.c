@@ -95,6 +95,8 @@ static void print_tokens(token *t) {
     snprintf(
         token_msg, sizeof(token_msg), "ERROR(%.*s)", STRING8_FMT(t->lexeme)
     );
+    fprintf(stderr, "%s\n", token_msg);
+    exit(EXIT_FAILURE);
     break;
   case TOK_IDENT:
     snprintf(

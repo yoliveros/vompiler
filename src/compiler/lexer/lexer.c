@@ -73,8 +73,14 @@ token *read_number(lexer *lexer) {
     c = lexer_peak(lexer);
   }
 
+  if (isalpha(c)) {
+    t->type = TOK_ERROR;
+    goto ret;
+  }
+
   t->lexeme.len = lexer->position - start;
 
+ret:
   return t;
 }
 
